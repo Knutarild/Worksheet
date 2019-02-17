@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import Intents
 
 class ViewController: UIViewController {
 
@@ -19,6 +20,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var messageLabel: UILabel!
     @IBOutlet weak var messageBGView: UIView!
     
+
     override func viewDidLoad() {
         super.viewDidLoad()
         checkInButton.layer.cornerRadius = 8

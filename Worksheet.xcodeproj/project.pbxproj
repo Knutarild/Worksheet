@@ -48,6 +48,16 @@
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		72922B082211B06E002B7C01 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
@@ -67,7 +77,6 @@
 		721E8C7621E50ED7005BE30C /* WorksheetUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorksheetUITests.swift; sourceTree = "<group>"; };
 		721E8C7821E50ED7005BE30C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		721E8C8421E540EF005BE30C /* Worksheet.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Worksheet.entitlements; sourceTree = "<group>"; };
-		72459A49220D736D00313F72 /* IntentsUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IntentsUI.framework; path = System/Library/Frameworks/IntentsUI.framework; sourceTree = SDKROOT; };
 		724A47E821E693670074AB05 /* SettingsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsVC.swift; sourceTree = "<group>"; };
 		724A47EA21E91FCC0074AB05 /* CheckInVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckInVC.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -154,7 +163,6 @@
 		72459A48220D736D00313F72 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				72459A49220D736D00313F72 /* IntentsUI.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -181,6 +189,7 @@
 				721E8C4D21E50ED5005BE30C /* Frameworks */,
 				721E8C4E21E50ED5005BE30C /* Resources */,
 				72459A5E220D736D00313F72 /* Embed App Extensions */,
+				72922B082211B06E002B7C01 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
