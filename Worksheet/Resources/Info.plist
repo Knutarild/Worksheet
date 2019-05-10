@@ -41,8 +41,6 @@
 		<string>ActivityIntent</string>
 		<string>CheckInIntent</string>
 		<string>CheckOutIntent</string>
-		<string>EndActivityIntent</string>
-		<string>StartActivityIntent</string>
 	</array>
 	<key>UIFileSharingEnabled</key>
 	<true/>
