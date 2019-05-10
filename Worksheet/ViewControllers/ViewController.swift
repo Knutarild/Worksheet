@@ -19,17 +19,15 @@ class ViewController: UIViewController {
     @IBOutlet weak var helpButton: UIButton!
     @IBOutlet weak var messageLabel: UILabel!
     @IBOutlet weak var messageBGView: UIView!
+    @IBOutlet weak var weeklyLabel: UILabel!
+    @IBOutlet weak var semesterLabel: UILabel!
     
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        checkInButton.layer.cornerRadius = 8
-        checkInButton.layer.borderWidth = 0.5
-        checkInButton.layer.borderColor = UIColor.white.cgColor
         
-        checkOutButton.layer.cornerRadius = 8
-        checkOutButton.layer.borderWidth = 0.5
-        checkOutButton.layer.borderColor = UIColor.white.cgColor
+        checkInButton.applyRoundedBoarder()
+        checkOutButton.applyRoundedBoarder()
         
         messageBGView.layer.cornerRadius = 8
         messageBGView.layer.borderWidth = 0.5
@@ -39,6 +37,8 @@ class ViewController: UIViewController {
         evaluateButtons()
 
         NotificationCenter.default.addObserver(self, selector: #selector(self.reloadData(_:)), name: NSNotification.Name("ReloadNotification"), object: nil)
+        
+        setupLabels()
     }
 
     
@@ -106,6 +106,83 @@ class ViewController: UIViewController {
     
     @IBAction func checkOutPressed(_ sender: Any) {
         self.performSegue(withIdentifier: "showCheckOutVC", sender: self)
+    }
+    
+    func setupLabels() {
+        let currentWeekNumber = Calendar.current.component(.weekOfYear, from: Date())
+        var weeklyHours: TimeInterval = 0
+        var totalHours: TimeInterval = 0
+        let iCloudDocumentsURL = FileManager.default.url(forUbiquityContainerIdentifier: nil)?.appendingPathComponent("Documents")
+        if  iCloudDocumentsURL != nil {
+            
+            //Create the Directory if it doesn't exist
+            if (!FileManager.default.fileExists(atPath: iCloudDocumentsURL!.path, isDirectory: nil)) {
+                do {
+                    try FileManager.default.createDirectory(at: iCloudDocumentsURL!, withIntermediateDirectories: true, attributes: nil)
+                } catch {
+                    print("Could not create iCloud directory.")
+                }
+            }
+            
+            do {
+                let files = try FileManager.default.contentsOfDirectory(atPath: iCloudDocumentsURL!.path)
+                
+                for file in files {
+                    if !file.hasPrefix(".") {
+                        let data = try String(contentsOfFile: "\(iCloudDocumentsURL!.path)/\(file)", encoding: .utf8).components(separatedBy: .newlines)
+                        for line in data {
+                            if !line.isEmpty {
+                                let regex = try! NSRegularExpression(pattern: "[^0-9]")
+                                let firstEntry = line.components(separatedBy: ",").first!.lowercased()
+                                let range = NSRange(location: 0, length: firstEntry.utf8.count)
+                                if regex.firstMatch(in: firstEntry, options: [], range: range) != nil {
+                                    // first entry is not a date
+                                    continue
+                                }
+                                let columns = line.components(separatedBy: ",")
+                                let checkIn = columns[2].components(separatedBy: ":")
+                                let checkOut = columns[3].components(separatedBy: ":")
+                                
+                                let formatter = DateComponentsFormatter()
+                                formatter.unitsStyle = .full
+                                formatter.allowedUnits = [NSCalendar.Unit.hour, NSCalendar.Unit.minute]
+                                
+                                var checkInComponents = DateComponents()
+                                checkInComponents.hour = Int(checkIn[0])
+                                checkInComponents.minute = Int(checkIn[1])
+                                let checkInDate = Calendar.current.date(from: checkInComponents)!
+                                
+                                var checkOutComponents = DateComponents()
+                                checkOutComponents.hour = Int(checkOut[0])
+                                checkOutComponents.minute = Int(checkOut[1])
+                                let checkOutDate = Calendar.current.date(from: checkOutComponents)!
+                                
+                                let elapsedTime = checkOutDate.timeIntervalSince(checkInDate)
+                                
+                                if (file.contains("\(currentWeekNumber)")) {
+                                    weeklyHours += elapsedTime
+                                }
+                                totalHours += elapsedTime
+                            }
+                        }
+                    }
+                }
+                
+                var ti = NSInteger(totalHours)
+                var minutes = (ti/60) % 60
+                var hours = (ti/3600)
+                semesterLabel.text = "\(hours) timer og \(minutes) minutter"
+                
+                ti = NSInteger(weeklyHours)
+                minutes = (ti/60) % 60
+                hours = (ti/3600)
+                weeklyLabel.text = "\(hours) timer og \(minutes) minutter"
+                
+            } catch let error {
+                print("Error: \(error)")
+            }
+            
+        }
     }
 }
 
